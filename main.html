@@ -1,0 +1,91 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery Mobile Web App</title>
+<link href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css"/>
+<script src="http://code.jquery.com/jquery-1.6.4.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+<script src="http://debug.phonegap.com/target/target-script-min.js#Aramii"></script>
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<meta name="viewport" id="viewport"
+  content="width=device-width, height=device-height,
+  initial-scale=1.0, maximum-scale=1.0,
+  user-scalable=no;" />
+</head> 
+<body> 
+<!--Home Page(1)-->
+<div data-role="page" id="page">
+	<div data-role="header"> 
+		<h1>کاندیدەکانی ی.ن.ک</h1>
+	</div>
+	<div data-role="content">	
+		<ul data-role="listview" id="kandidList" data-filter="true" data-filter-placeholder="دۆزینەوەی کاندیدی دڵخواز...">
+		</ul>		
+	</div>
+	<div data-role="footer" class="footer">
+		<h4>دەنگی هەموومان: یەکێتی نیشتمانی کوردستان</h4>
+	</div>
+</div>
+<script type="text/javascript" charset="utf-8">
+			/* detect device  FOR FITTING THE HEIGHT OF CONETNT*/
+	var ua = navigator.userAgent,
+		iphone = ~ua.indexOf('iPhone') || ~ua.indexOf('iPod'),
+		ipad = ~ua.indexOf('iPad'),
+		ios = iphone || ipad,
+		android = ~ua.indexOf('Android');	
+	$(document).delegate('#the_page', 'pageshow', function () {
+		var $page = $(this),
+			$target = $(this).find('.fullHeight'),
+			t_padding = parseInt($target.css('padding-top'))
+						+ parseInt($target.css('padding-bottom')),
+			w_height = (ios)? screen.height-65: $(window).height();     // "-65" is to compensate for url bar. Any better ideas?
+			headFootHeight = 0;
+	
+		// Get total height for all headers and footers on page
+		$page.find('[data-role="footer"], [data-role="header"]').each(function() {
+			var myTotalHeight = $(this).height()
+								+ parseInt( $(this).css('padding-top') )
+								+ parseInt( $(this).css('padding-bottom') );
+			headFootHeight += myTotalHeight;
+		});
+	
+		var the_height = (w_height - headFootHeight);           
+	
+		$page
+		 .height(w_height)
+		 .find('.fullHeight')
+		 .height(the_height - t_padding);
+	}); 
+var xml;
+    $(document).ready(function(){
+
+			$.ajax({
+				type: "GET",
+            url: "data_src.xml",
+            dataType: "xml",
+            success: xmlParser
+        });
+    });
+        //loading XML file and parsing to .main div.
+        function xmlParser(data) {
+            xml = data;
+            $('#load').fadeOut();
+            $(xml).find("kandid").each(function () {
+                name = $(this).find("name").text();
+                var id = $(this).find("id").text();
+                var nasyawbe = $(this).find("nasyawbe").text();
+                var imgaddrr = $(this).find("imgaddrr").text();
+                var slogan = $(this).find("slogan").text();
+                var details = $(this).find("details").text();
+                var listcode = $(this).find("listcode").text();
+				$("#kandidList").append('\n\t<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-first-child ui-btn-up-c">\n\t\t<div class="ui-btn-inner ui-li">\n\t\t\t<div class="ui-btn-text">\n\t\t\t\t<a href="#page'+id+'" class="ui-link-inherit"> \n<img src="images/'+imgaddrr+'" class="ui-li-thumb"> \n<h2 class="ui-li-heading">'+name+'</h2>\n \n<p class="ui-li-desc">'+nasyawbe+'</p>\n</a>\n </div>\n<span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>\n</div>\n</li>');
+				$('#listview').listview('refresh'); 
+				
+				$("body").append('\n\n<!--Page'+id+'-->\n<div data-role="page" id="page'+id+'" class="detailsWrap" data-add-back-btn="true" data-back-btn-text="گەڕانەوە">\n\t<div data-role="header">\n\t\t<h1>'+name+'</h1>\n\t</div>\n\t<div data-role="content">\n\t\t<img src="images/'+imgaddrr+'" class="kandidImg" /><p class="kandidDetails">'+details+'</p>\n\t</div>\n\t<div data-role="footer">\n\t\t<h4>دەنگی هەموومان: یەکێتی نیشتمانی کوردستان</h4>\n\t</div>\n</div>\n\n');
+                
+            });
+        }
+</script>
+</body>
+</html>

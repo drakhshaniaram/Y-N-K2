@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin:0;
+	padding:0;}
+body{
+	font-size:62.5%;}
+.ui-content{
+	height:100%;}
+#kandidList{
+	font-family:Tahoma;}
+.ui-li-thumb{
+	margin-left:5px;
+	height:100%;}
+.kandidDetails{
+	text-align:right;
+	direction:rtl;
+	font-family:Tahoma;
+	font-size:1.3em;
+	height:100%
+	}
+.kandidImg{
+	float:right;
+	width:105px;
+	height:158px;
+	padding-left:14px;
+	border-radius:5px;
+	
+	}
+.detailsWrap{
+	clear:both;}
